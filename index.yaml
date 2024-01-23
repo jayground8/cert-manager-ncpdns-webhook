@@ -1,0 +1,13 @@
+apiVersion: v1
+entries:
+  ncpdns-webhook:
+  - apiVersion: v1
+    appVersion: 0.1.4
+    created: "2024-01-23T16:02:10.688903646Z"
+    description: Cert manager naver cloud webhook Helm chart
+    digest: 78ed1c3bebf625cf7aa04df62da016e4b746c02f1bf48bbe50e6227cdabf2157
+    name: ncpdns-webhook
+    urls:
+    - https://github.com/jayground8/cert-manager-ncpdns-webhook/releases/download/ncpdns-webhook-0.1.4/ncpdns-webhook-0.1.4.tgz
+    version: 0.1.4
+generated: "2024-01-23T16:02:10.688914676Z"
