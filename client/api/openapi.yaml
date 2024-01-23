@@ -1,0 +1,396 @@
+openapi: 3.1.0
+info:
+  title: ncloud
+  version: 1.0.0
+servers:
+- description: ncloud server
+  url: https://globaldns.apigw.gov-ntruss.com/dns/v1
+paths:
+  /ncpdns/record/apply/{domainId}:
+    put:
+      operationId: applyRecordChange
+      parameters:
+      - explode: false
+        in: path
+        name: domainId
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          description: 정상 응답
+      summary: 도메인 설정
+  /ncpdns/domain:
+    get:
+      operationId: getDomain
+      parameters:
+      - explode: true
+        in: query
+        name: page
+        required: true
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: size
+        required: true
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: domainName
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getDomain_200_response'
+          description: 정상응답
+      summary: 도메인 조회
+    post:
+      operationId: postDomain
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/postDomain_request'
+      responses:
+        "200":
+          description: 정상 응답
+      summary: 도메인 생성
+  /ncpdns/record/{domainId}:
+    delete:
+      operationId: deleteRecord
+      parameters:
+      - explode: false
+        in: path
+        name: domainId
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              items:
+                format: int64
+                type: integer
+              type: array
+      responses:
+        "200":
+          description: 정상 응답
+      summary: 레코드 삭제
+    get:
+      operationId: getRecord
+      parameters:
+      - explode: false
+        in: path
+        name: domainId
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      - explode: true
+        in: query
+        name: page
+        required: true
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: size
+        required: true
+        schema:
+          format: int32
+          type: integer
+        style: form
+      - explode: true
+        in: query
+        name: recordType
+        required: false
+        schema:
+          type: string
+        style: form
+      - explode: true
+        in: query
+        name: searchContent
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getRecord_200_response'
+          description: 정상응답
+      summary: 레코드 조회
+    post:
+      operationId: createRecord
+      parameters:
+      - explode: false
+        in: path
+        name: domainId
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              items:
+                $ref: '#/components/schemas/createRecord_request_inner'
+              type: array
+      responses:
+        "200":
+          description: 정상 응답
+      summary: 레코드 생성
+    put:
+      operationId: updateRecord
+      parameters:
+      - explode: false
+        in: path
+        name: domainId
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              items:
+                $ref: '#/components/schemas/updateRecord_request_inner'
+              type: array
+      responses:
+        "200":
+          description: 정상 응답
+      summary: 레코드 수정
+components:
+  parameters:
+    timestampHeader:
+      explode: false
+      in: header
+      name: x-ncp-apigw-timestamp
+      required: true
+      schema:
+        type: string
+      style: simple
+    accessKeyHeader:
+      explode: false
+      in: header
+      name: x-ncp-iam-access-key
+      required: true
+      schema:
+        type: string
+      style: simple
+    signatureHeader:
+      explode: false
+      in: header
+      name: x-ncp-apigw-signature-v2
+      required: true
+      schema:
+        type: string
+      style: simple
+  schemas:
+    createRecord_request_inner:
+      properties:
+        host:
+          type: string
+        type:
+          type: string
+        content:
+          type: string
+        ttl:
+          format: int64
+          type: integer
+        aliasId:
+          format: int64
+          type: integer
+        lbId:
+          format: int64
+          type: integer
+      required:
+      - content
+      - host
+      - ttl
+      - type
+    postDomain_request:
+      properties:
+        comments:
+          type: string
+        name:
+          type: string
+    getRecord_200_response_content_inner:
+      example:
+        defaultYn: true
+        type: type
+        ttl: 0
+        content: content
+        lbPlatform: lbPlatform
+        delYn: true
+        createdDate: 5
+        aliasId: 6
+        domainName: domainName
+        name: name
+        host: host
+        modifiedDate: 5
+        aliasYn: true
+        lbYn: true
+        id: 1
+        applyYn: true
+      properties:
+        name:
+          type: string
+        host:
+          type: string
+        type:
+          type: string
+        content:
+          type: string
+        ttl:
+          format: int64
+          type: integer
+        aliasId:
+          format: int64
+          type: integer
+        id:
+          format: int64
+          type: integer
+        domainName:
+          type: string
+        createdDate:
+          format: int64
+          type: integer
+        modifiedDate:
+          format: int64
+          type: integer
+        defaultYn:
+          type: boolean
+        applyYn:
+          type: boolean
+        aliasYn:
+          type: boolean
+        lbPlatform:
+          type: string
+        lbYn:
+          type: boolean
+        delYn:
+          type: boolean
+    getDomain_200_response:
+      example:
+        content:
+        - completeYn: true
+          name: name
+          id: 0
+          status: status
+        - completeYn: true
+          name: name
+          id: 0
+          status: status
+      properties:
+        content:
+          items:
+            $ref: '#/components/schemas/getDomain_200_response_content_inner'
+          type: array
+    getDomain_200_response_content_inner:
+      example:
+        completeYn: true
+        name: name
+        id: 0
+        status: status
+      properties:
+        id:
+          format: int64
+          type: integer
+        name:
+          type: string
+        completeYn:
+          type: boolean
+        status:
+          type: string
+    updateRecord_request_inner:
+      properties:
+        id:
+          format: int64
+          type: integer
+        host:
+          type: string
+        type:
+          type: string
+        content:
+          type: string
+        ttl:
+          format: int64
+          type: integer
+        aliasId:
+          format: int64
+          type: integer
+        lbId:
+          format: int64
+          type: integer
+      required:
+      - content
+      - host
+      - id
+      - ttl
+      - type
+    getRecord_200_response:
+      example:
+        content:
+        - defaultYn: true
+          type: type
+          ttl: 0
+          content: content
+          lbPlatform: lbPlatform
+          delYn: true
+          createdDate: 5
+          aliasId: 6
+          domainName: domainName
+          name: name
+          host: host
+          modifiedDate: 5
+          aliasYn: true
+          lbYn: true
+          id: 1
+          applyYn: true
+        - defaultYn: true
+          type: type
+          ttl: 0
+          content: content
+          lbPlatform: lbPlatform
+          delYn: true
+          createdDate: 5
+          aliasId: 6
+          domainName: domainName
+          name: name
+          host: host
+          modifiedDate: 5
+          aliasYn: true
+          lbYn: true
+          id: 1
+          applyYn: true
+      properties:
+        content:
+          items:
+            $ref: '#/components/schemas/getRecord_200_response_content_inner'
+          type: array
